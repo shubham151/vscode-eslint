@@ -7,7 +7,50 @@
 
 'use strict';
 
-console.log('vscode-eslint: this repository publishes a VS Code extension, not a standalone CLI.');
-console.log('Install the extension in VS Code instead.');
+const path = require('path');
+const { spawn } = require('child_process');
 
-process.exitCode = 0;
+function usage(exitCode = 0) {
+	const msg = [
+		'vscode-eslint (LSP server)',
+		'',
+		'Usage:',
+		'  vscode-eslint --stdio',
+		'',
+		'Options:',
+		'  --stdio     Use stdio transport (LSP over JSON-RPC on stdin/stdout)',
+		'  -h, --help  Show this help',
+	].join('\n');
+	if (exitCode === 0) {
+		process.stdout.write(msg + '\n');
+	} else {
+		process.stderr.write(msg + '\n');
+	}
+	process.exit(exitCode);
+}
+
+const args = process.argv.slice(2);
+if (args.includes('-h') || args.includes('--help')) {
+	usage(0);
+}
+
+const wantsStdio = args.includes('--stdio');
+if (!wantsStdio) {
+	process.stderr.write('error: missing required --stdio\n\n');
+	usage(2);
+}
+
+// Run the bundled server produced by server/webpack.config.js
+const serverEntry = path.resolve(__dirname, '..', 'server', 'out', 'eslintServer.js');
+
+const child = spawn(process.execPath, [serverEntry], {
+	stdio: 'inherit'
+});
+
+child.on('exit', (code, signal) => {
+	if (signal) {
+		process.exitCode = 1;
+		return;
+	}
+	process.exitCode = code ?? 0;
+});
