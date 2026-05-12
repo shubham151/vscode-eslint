@@ -63,12 +63,26 @@ If you're using the legacy version, consider reading [how to migrate to flat con
 
 # Index
 * [Release Notes](#release-notes)
+* [Automated npm publishing](#automated-npm-publishing)
 * [Settings Options](#settings-options)
 * [Settings Migration](#settings-migration)
 * [Commands](#commands)
 * [Using the extension with VS Code's task running](#using-the-extension-with-vs-codes-task-running)
 * [Using ESLint to validate TypeScript files](#using-eslint-to-validate-typescript-files)
 * [ESLint 6.x](#eslint-6x)
+
+## Automated npm publishing
+
+This repository uses [Release Please](https://github.com/googleapis/release-please) for automated versioning, changelog generation, and npm publishing.
+
+1. Add an npm automation token to this repository:
+   - In npmjs.com, create an access token.
+   - In GitHub, add it as a repository secret named `NPM_TOKEN`.
+2. On every push to the default branch, the `Release Please` workflow runs and opens (or updates) a release PR.
+3. Merge the release PR to create the GitHub release/tag.
+4. When the release is published, the `Publish to npm` workflow runs automatically and publishes to npmjs.com using `NODE_AUTH_TOKEN` from `NPM_TOKEN`.
+
+Release Please determines semantic version bumps from Conventional Commit messages (`feat:`, `fix:`, and `!`/`BREAKING CHANGE`).
 
 ## Release Notes
 

@@ -5,6 +5,15 @@
 	"version": "3.0.24",
 	"author": "Microsoft Corporation",
 	"license": "MIT",
+	"files": [
+		"client/out/**",
+		"server/out/**",
+		"package-json-schema.json",
+		"eslint_icon.png",
+		"README.md",
+		"CHANGELOG.md",
+		"License.txt"
+	],
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/Microsoft/vscode-eslint.git"
