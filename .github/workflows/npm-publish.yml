@@ -23,9 +23,12 @@ jobs:
         run: npm ci
 
       - name: Build package
+        run: npm run webpack
+
+      - name: Verify build outputs
         run: |
-          npm run --if-present build
-          npm run --if-present webpack
+          test -f client/out/extension.js
+          test -f server/out/eslintServer.js
 
       - name: Publish package
         env:
